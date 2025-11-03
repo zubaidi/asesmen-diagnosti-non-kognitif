@@ -1,5 +1,4 @@
-- [x] Add CRUD methods to SiswaController: create, store, show, edit, update, destroy
-- [x] Add CRUD routes in web.php
-- [x] Create tambah-siswa.blade.php view
-- [x] Create edit-siswa.blade.php view
-- [x] Update index.blade.php links to correct routes
+# TODO: Add Student Answer Categories Table to Dashboard
+
+- [x] Modify DashboardController.php to fetch and calculate category counts and percentages
+- [x] Update dashboard.blade.php to add the table displaying categories, counts, and percentages

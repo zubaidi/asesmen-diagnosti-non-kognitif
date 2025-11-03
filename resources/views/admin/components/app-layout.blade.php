@@ -32,6 +32,32 @@
             transition: left 0.3s ease;
         }
 
+        .sidebar-brand {
+            display: flex;
+            align-items: flex-start;
+            /* logo di kiri, teks di kanan */
+            gap: 10px;
+            /* jarak logo dan teks */
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .text-container div {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1.2;
+            /* jarak antar baris teks */
+        }
+
         .sidebar.show {
             left: 0;
         }
@@ -46,6 +72,12 @@
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             color: white !important;
+        }
+
+        .sidebar-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white !important;
+            font-weight: bold;
         }
 
         .sidebar-brand {
@@ -113,13 +145,16 @@
 <body>
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <a href="#" class="sidebar-brand">
-            <i class="fas fa-graduation-cap me-2"></i>
-            ANK
-        </a>
+        <div class="sidebar-brand">
+            <img src="{{ asset('assets/images/sa.png') }}" alt="Logo" class="logo">
+            <div class="text-container">
+                <div>Aplikasi Asesmen</div>
+                <div>Diagnostik Non Kognitif</div>
+            </div>
+        </div>
         <div class="list-group list-group-flush">
             <a href="{{ route('dashboard') }}"
-                class="sidebar-link sidebar-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}">
+                class="sidebar-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}">
                 <i class="fas fa-tachometer-alt me-2"></i>
                 Dashboard
             </a>
@@ -132,7 +167,7 @@
                 <i class="fa fa-list-alt me-2"></i>
                 Daftar Pertanyaan
             </a>
-            <a href="#" class="sidebar-link {{ request()->routeIs(patterns: 'hasil.*') ? 'active' : '' }}">
+            <a href="#" class="sidebar-link {{ request()->routeIs('hasil.*') ? 'active' : '' }}">
                 <i class="fas fa-poll me-2"></i>
                 Hasil Quisioner
             </a>
@@ -158,7 +193,7 @@
             <div class="d-flex align-items-center">
                 <span class="text-muted me-3">
                     <i class="fas fa-user-circle me-2"></i>
-                    Administrator
+                    {{ Auth::user()->name }}
                 </span>
                 <span class="text-muted small" id="currentTime"></span>
             </div>

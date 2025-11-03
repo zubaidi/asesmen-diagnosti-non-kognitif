@@ -1,6 +1,12 @@
 <x-app-layout>
     <div class="container-fluid p-4">
         <div class="page">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Data Siswa</li>
+                </ol>
+            </nav>
             <div class="card shadow">
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -27,17 +33,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($siswa as $s)
+                                @foreach ($siswa as $s)
                                     <tr>
                                         <td style="text-align: center; width: 60px;">{{ $s->id }}</td>
                                         <td style="text-align: center; width: 100px;">{{ $s->nis }}</td>
                                         <td>{{ $s->nama_siswa }}</td>
                                         <td style="text-align: center; width: 100px;">{{ $s->kelas }}</td>
                                         <td style="text-align: center; width: 157px;">
-                                            <a href="{{ route('siswa.edit', $s) }}" class="btn btn-info btn-sm me-1" title="Edit">
+                                            <a href="{{ route('siswa.edit', $s) }}" class="btn btn-info btn-sm me-1"
+                                                title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('siswa.destroy', $s) }}" method="post" style="display: inline;">
+                                            <form action="{{ route('siswa.destroy', $s) }}" method="post"
+                                                style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger btn-sm" title="Hapus">
@@ -46,8 +54,8 @@
                                             </form>
                                         </td>
                                     </tr>
-                                    @endforeach
-                                </tbody>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>

@@ -33,7 +33,7 @@ class SiswaController extends Controller
 
     public function show(Siswa $siswa)
     {
-        return view('admin.siswa.show', compact('siswa'));
+        return view('admin.siswa.index', compact('siswa'));
     }
 
     public function edit(Siswa $siswa)
