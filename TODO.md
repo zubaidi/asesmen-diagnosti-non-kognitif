@@ -1,0 +1,5 @@
+- [x] Add CRUD methods to SiswaController: create, store, show, edit, update, destroy
+- [x] Add CRUD routes in web.php
+- [x] Create tambah-siswa.blade.php view
+- [x] Create edit-siswa.blade.php view
+- [x] Update index.blade.php links to correct routes
