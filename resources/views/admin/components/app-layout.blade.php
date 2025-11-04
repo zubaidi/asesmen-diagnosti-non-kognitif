@@ -28,7 +28,8 @@
             height: 100vh;
             background-color: #4e73df;
             z-index: 1000;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
             transition: left 0.3s ease;
         }
 
@@ -78,6 +79,18 @@
             background-color: rgba(255, 255, 255, 0.2);
             color: white !important;
             font-weight: bold;
+        }
+
+        .chevron-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-link[data-bs-toggle="collapse"].collapsed .chevron-icon {
+            transform: rotate(0deg);
+        }
+
+        .sidebar-link[data-bs-toggle="collapse"]:not(.collapsed) .chevron-icon {
+            transform: rotate(180deg);
         }
 
         .sidebar-brand {
@@ -139,6 +152,32 @@
             border-top: 1px solid #dee2e6;
             margin-top: 10px;
         }
+
+        .sidebar-footer {
+            position: fixed;
+            bottom: 0;
+            left: -250px;
+            width: 250px;
+            background-color: #4e73df;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar-footer.show {
+            left: 0;
+        }
+
+        @media (min-width: 768px) {
+            .sidebar-footer {
+                left: 0;
+            }
+
+            .sidebar-footer.hide {
+                left: -250px;
+            }
+        }
     </style>
 </head>
 
@@ -152,33 +191,48 @@
                 <div>Diagnostik Non Kognitif</div>
             </div>
         </div>
-        <div class="list-group list-group-flush">
+        <div class="list-group list-group-flush grow">
             <a href="{{ route('dashboard') }}"
                 class="sidebar-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}">
-                <i class="fas fa-tachometer-alt me-2"></i>
-                Dashboard
+                <i class="fas fa-home me-2"></i>
+                Beranda
             </a>
             <a href="{{ route('siswa.index') }}"
                 class="sidebar-link {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
                 <i class="fas fa-users me-2"></i>
                 Siswa
             </a>
-            <a href="#" class="sidebar-link {{ request()->routeIs('pertanyaan.*') ? 'active' : '' }}">
+            <a class="sidebar-link {{ request()->routeIs('pertanyaan.*') || request()->routeIs('category.*') ? 'active' : '' }}" data-bs-toggle="collapse" data-bs-target="#pertanyaanCollapse" aria-expanded="false" aria-controls="pertanyaanCollapse">
                 <i class="fa fa-list-alt me-2"></i>
-                Daftar Pertanyaan
+                Pertanyaan
+                <i class="fas fa-chevron-down float-end chevron-icon"></i>
             </a>
+            <div class="collapse" id="pertanyaanCollapse">
+                <a href="{{ route('pertanyaan.index') }}" class="sidebar-link ms-3 {{ request()->routeIs('pertanyaan.index') ? 'active' : '' }}">
+                    <i class="fas fa-list me-2"></i>
+                    Daftar Pertanyaan
+                </a>
+                <a href="{{ route('category.index') }}" class="sidebar-link ms-3 {{ request()->routeIs('category.index') ? 'active' : '' }}">
+                    <i class="fas fa-tags me-2"></i>
+                    Kategori
+                </a>
+            </div>
             <a href="#" class="sidebar-link {{ request()->routeIs('hasil.*') ? 'active' : '' }}">
                 <i class="fas fa-poll me-2"></i>
                 Hasil Quisioner
             </a>
-            <a href="#" class="sidebar-link mt-auto" onclick="logout()">
+            <a href="#" class="sidebar-link {{ request()->routeIs('hasil.*') ? 'active' : '' }}">
+                <i class="fas fa-gear me-2"></i>
+                Pengaturan
+            </a>
+            <a href="#" class="sidebar-link" onclick="logout()">
                 <i class="fas fa-sign-out-alt me-2"></i>
                 Logout
             </a>
-            <!-- Footer -->
-            <div class="sidebar-footer position-absolute bottom-0 w-100 p-3 text-center">
-                <p class="mt-2 mb-0 text-muted" style="font-size: 0.8rem;">&copy; 2025 Codepelita SMKSA</p>
-            </div>
+        </div>
+        <!-- Footer -->
+        <div class="sidebar-footer p-3 text-center" id="sidebarFooter">
+            <p class="mt-2 mb-0 text-muted" style="font-size: 0.8rem;">&copy; 2025 Codepelita SMKSA</p>
         </div>
     </nav>
 
@@ -217,16 +271,21 @@
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const content = document.getElementById('mainContent');
+            const footer = document.getElementById('sidebarFooter');
 
             // Untuk mobile
             sidebar.classList.toggle('show');
+            footer.classList.toggle('show');
 
             // Untuk desktop
             if (window.innerWidth >= 768) {
                 sidebar.classList.toggle('hide');
                 content.classList.toggle('full');
+                footer.classList.toggle('hide');
             }
         });
+
+        // Handle collapse for Pertanyaan menu - removed custom JS as Bootstrap handles it
 
         // login error
         document.addEventListener('DOMContentLoaded', function() {

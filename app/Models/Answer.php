@@ -34,10 +34,16 @@ class Answer extends Model
         'id_option_selected_16',
         'output_category',
         'output_description',
+        'category_id',
     ];
 
     public function question()
     {
         return $this->belongsTo(Question::class, 'id_soal', 'id_soal');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

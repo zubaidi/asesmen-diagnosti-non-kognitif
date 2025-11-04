@@ -60,33 +60,36 @@
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card bg-white shadow">
-                    <div class="card-header text-primary">
-                        <i class="fas fa-chart-bar me-2"></i>Distribusi Kategori Jawaban Siswa
+                    <div class="card-header text-primary d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="true" aria-controls="categoryCollapse" style="cursor: pointer;">
+                        <span><i class="fas fa-chart-bar me-2"></i>Distribusi Kategori Jawaban Siswa</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Kategori</th>
-                                        <th>Jumlah Siswa</th>
-                                        <th>Persentase (%)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($categories as $category)
-                                    <tr>
-                                        <td>{{ $category['category'] }}</td>
-                                        <td>{{ $category['count'] }}</td>
-                                        <td>{{ $category['percentage'] }}%</td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="3" class="text-center">Belum ada data kategori</td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                    <div id="categoryCollapse" class="collapse show">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Kategori</th>
+                                            <th>Jumlah Siswa</th>
+                                            <th>Persentase (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($categories as $category)
+                                        <tr>
+                                            <td>{{ $category['category'] }}</td>
+                                            <td>{{ $category['count'] }}</td>
+                                            <td>{{ $category['percentage'] }}%</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center">Belum ada data kategori</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
