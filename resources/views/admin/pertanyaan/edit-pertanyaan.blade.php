@@ -101,7 +101,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('pertanyaan.index') }}" class="btn btn-secondary">Kembali</a>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Update</button>
                         </div>
                     </form>
                 </div>

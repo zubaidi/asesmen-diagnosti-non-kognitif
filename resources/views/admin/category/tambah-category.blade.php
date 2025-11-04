@@ -39,7 +39,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('category.index') }}" class="btn btn-secondary">Kembali</a>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Simpan</button>
                         </div>
                     </form>
                 </div>

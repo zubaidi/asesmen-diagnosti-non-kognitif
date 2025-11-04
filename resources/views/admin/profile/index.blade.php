@@ -17,10 +17,10 @@
         @endif
 
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Profil</h5>
+                        <h6 class="mb-0"></i>Edit Profil</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('profile.update') }}" method="POST">

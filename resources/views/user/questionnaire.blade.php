@@ -42,6 +42,7 @@
             margin-bottom: 8px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: small;
         }
 
         .option-label:hover {
@@ -90,12 +91,12 @@
     <div class="container-fluid mt-2">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3">
+            <div class="col-md-3 h-100 flex-column">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Daftar Soal</h5>
+                        <p class="mb-0">Daftar Soal</p>
                     </div>
-                    <div class="card-body p-2">
+                    <div class="card-body p-2 justify-content-center">
                         <div style="max-height: 400px; overflow-y: auto;">
                             @php
                                 $questionKeys = $questions->keys()->toArray();
@@ -125,7 +126,6 @@
 
             <!-- Main Content -->
             <div class="col-md-9">
-
                 <!-- Student Info -->
                 <div class="card mb-4">
                     <div class="card-body">
@@ -138,14 +138,18 @@
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-12">
+                            <div class="col-md-6">
                                 <strong>Progress:</strong> {{ $answeredCount }} dari {{ $totalQuestions }} soal telah
                                 dikerjakan
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Waktu Mengerjakan:</strong>
+                                <span id="timer">00:00:00</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                {{--
                 <!-- Progress Bar -->
                 <div class="mb-2">
                     <div class="progress">
@@ -154,11 +158,11 @@
                             Pertanyaan {{ $currentIndex + 1 }} dari {{ $totalQuestions }}
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="question-card">
                     @if ($currentQuestion)
-                        <h5 class="mb-3">{{ $currentIndex + 1 }}. {{ $currentQuestion->question_text }}</h5>
+                        <p class="mb-3">{{ $currentIndex + 1 }}. {{ $currentQuestion->question_text }}</p>
 
                         <div class="options">
                             <input type="radio" id="q{{ $currentQuestion->id }}_a" name="answer"
@@ -274,11 +278,25 @@
             $('#finishBtn').click(function() {
                 if (confirm(
                         'Apakah Anda yakin ingin menyelesaikan kuesioner? Jawaban yang belum tersimpan akan hilang.'
-                        )) {
+                    )) {
                     window.location.href = '{{ route('user.submit.page') }}';
                 }
             });
         });
+
+        let seconds = 0;
+
+        function formatTime(sec) {
+            const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+            const secs = String(sec % 60).padStart(2, '0');
+            return `${hrs}:${mins}:${secs}`;
+        }
+
+        setInterval(() => {
+            seconds++;
+            document.getElementById('timer').textContent = formatTime(seconds);
+        }, 1000);
     </script>
 </body>
 

@@ -26,6 +26,7 @@ class UserController extends Controller
         Siswa::create([
             'nis' => $request->nis,
             'nama_siswa' => $request->nama_siswa,
+            'kelas' => 'X',
         ]);
 
         // Store in session

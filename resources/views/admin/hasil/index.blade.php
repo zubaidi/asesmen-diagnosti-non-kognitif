@@ -22,7 +22,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="dataTable" class="table table-striped table-hover">
+                    <table id="dataTable" class="table table-bordered">
                         <thead class="table-primary">
                             <tr>
                                 <th>No</th>
@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($answers as $index => $answer)
+                            @foreach($answers as $index => $answer)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $answer->answer_code }}</td>
@@ -67,7 +67,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

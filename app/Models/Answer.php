@@ -27,4 +27,9 @@ class Answer extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'nis', 'nis');
+    }
 }
