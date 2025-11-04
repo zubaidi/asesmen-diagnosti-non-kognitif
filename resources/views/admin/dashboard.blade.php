@@ -33,7 +33,7 @@
                     </div>
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-success">{{ $sudahMengerjakan }}</h5>
-                        <a href="#" class="btn btn-success btn-sm mt-auto">
+                        <a href="{{ route('hasil.index') }}" class="btn btn-success btn-sm mt-auto">
                             <i class="fas fa-eye me-1"></i>Lihat Hasil
                         </a>
                     </div>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->string('answer_code', 10)->unique();
-            $table->string('nis');
+            $table->string('nis', 20);
             $table->string('id_soal', 6);
             $table->integer('id_option_chosen');
             $table->timestamps();

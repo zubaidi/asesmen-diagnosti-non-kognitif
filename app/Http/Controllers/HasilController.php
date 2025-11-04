@@ -9,7 +9,7 @@ class HasilController extends Controller
 {
     public function index()
     {
-        $answers = Answer::all();
+        $answers = Answer::with('question')->get();
         return view('admin.hasil.index', compact('answers'));
     }
 
@@ -25,25 +25,7 @@ class HasilController extends Controller
             'nis' => 'required|string|max:255',
             'nama_siswa' => 'required|string|max:255',
             'id_soal' => 'required|string|max:255',
-            'id_option_selected_1' => 'nullable|string',
-            'id_option_selected_2' => 'nullable|string',
-            'id_option_selected_3' => 'nullable|string',
-            'id_option_selected_4' => 'nullable|string',
-            'id_option_selected_5' => 'nullable|string',
-            'id_option_selected_6' => 'nullable|string',
-            'id_option_selected_7' => 'nullable|string',
-            'id_option_selected_8' => 'nullable|string',
-            'id_option_selected_9' => 'nullable|string',
-            'id_option_selected_10' => 'nullable|string',
-            'id_option_selected_11' => 'nullable|string',
-            'id_option_selected_12' => 'nullable|string',
-            'id_option_selected_13' => 'nullable|string',
-            'id_option_selected_14' => 'nullable|string',
-            'id_option_selected_15' => 'nullable|string',
-            'id_option_selected_16' => 'nullable|string',
-            'output_category' => 'nullable|string',
-            'output_description' => 'nullable|string',
-            'category_id' => 'nullable|integer',
+            'id_option_chosen' => 'required|integer',
         ]);
 
         Answer::create($request->all());
@@ -68,25 +50,7 @@ class HasilController extends Controller
             'nis' => 'required|string|max:255',
             'nama_siswa' => 'required|string|max:255',
             'id_soal' => 'required|string|max:255',
-            'id_option_selected_1' => 'nullable|string',
-            'id_option_selected_2' => 'nullable|string',
-            'id_option_selected_3' => 'nullable|string',
-            'id_option_selected_4' => 'nullable|string',
-            'id_option_selected_5' => 'nullable|string',
-            'id_option_selected_6' => 'nullable|string',
-            'id_option_selected_7' => 'nullable|string',
-            'id_option_selected_8' => 'nullable|string',
-            'id_option_selected_9' => 'nullable|string',
-            'id_option_selected_10' => 'nullable|string',
-            'id_option_selected_11' => 'nullable|string',
-            'id_option_selected_12' => 'nullable|string',
-            'id_option_selected_13' => 'nullable|string',
-            'id_option_selected_14' => 'nullable|string',
-            'id_option_selected_15' => 'nullable|string',
-            'id_option_selected_16' => 'nullable|string',
-            'output_category' => 'nullable|string',
-            'output_description' => 'nullable|string',
-            'category_id' => 'nullable|integer',
+            'id_option_chosen' => 'required|integer',
         ]);
 
         $hasil->update($request->all());

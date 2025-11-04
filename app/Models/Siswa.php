@@ -9,5 +9,5 @@ class Siswa extends Model
 {
     use HasFactory;
     protected $table = 'siswa';
-    protected $fillable = ['nis', 'nama_siswa', 'kelas', 'created_at', 'updated_at'];
+    protected $fillable = ['nis', 'nama_siswa'];
 }

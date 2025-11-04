@@ -207,7 +207,7 @@
                 Pertanyaan
                 <i class="fas fa-chevron-down float-end chevron-icon"></i>
             </a>
-            <div class="collapse" id="pertanyaanCollapse">
+            <div class="collapse {{ request()->routeIs('pertanyaan.*') || request()->routeIs('category.*') ? 'show' : '' }}" id="pertanyaanCollapse">
                 <a href="{{ route('pertanyaan.index') }}" class="sidebar-link ms-3 {{ request()->routeIs('pertanyaan.index') ? 'active' : '' }}">
                     <i class="fas fa-list me-2"></i>
                     Daftar Pertanyaan
@@ -217,15 +217,15 @@
                     Kategori
                 </a>
             </div>
-            <a href="#" class="sidebar-link {{ request()->routeIs('hasil.*') ? 'active' : '' }}">
+            <a href="{{ route('hasil.index') }}" class="sidebar-link {{ request()->routeIs('hasil.*') ? 'active' : '' }}">
                 <i class="fas fa-poll me-2"></i>
                 Hasil Quisioner
             </a>
-            <a href="#" class="sidebar-link {{ request()->routeIs('hasil.*') ? 'active' : '' }}">
-                <i class="fas fa-gear me-2"></i>
-                Pengaturan
+            <a href="{{ route('profile.index') }}" class="sidebar-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                <i class="fas fa-user-cog me-2"></i>
+                Pengaturan Profil
             </a>
-            <a href="#" class="sidebar-link" onclick="logout()">
+            <a href="{{ route('logout') }}" class="sidebar-link" onclick="logout()">
                 <i class="fas fa-sign-out-alt me-2"></i>
                 Logout
             </a>

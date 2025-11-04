@@ -17,15 +17,12 @@ class DashboardController extends Controller
         // Fetch all categories from categories table
         $allCategories = \App\Models\Category::all();
 
-        // Fetch category data from answers
-        $answerCategories = Answer::select('output_category')
-            ->selectRaw('COUNT(DISTINCT nis) as count')
-            ->groupBy('output_category')
-            ->pluck('count', 'output_category');
+        // Fetch category distribution from answers table - temporarily disabled due to missing column
+        $categoryCounts = collect(); // Empty collection for now
 
-        // Build categories array with all categories, defaulting to 0 if no answers
-        $categories = $allCategories->map(function ($category) use ($answerCategories, $sudahMengerjakan) {
-            $count = $answerCategories->get($category->name, 0);
+        // Build categories array with all categories from categories table
+        $categories = $allCategories->map(function ($category) use ($categoryCounts, $sudahMengerjakan) {
+            $count = $categoryCounts->get($category->name, 0);
             $percentage = $sudahMengerjakan > 0 ? round(($count / $sudahMengerjakan) * 100, 2) : 0;
             return [
                 'category' => $category->name,
