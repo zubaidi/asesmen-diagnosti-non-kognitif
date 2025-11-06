@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     // Pertanyaan Routes
     Route::resource('pertanyaan', PertanyaanController::class);
     // Hasil Routes
+    Route::get('hasil/export', [HasilController::class, 'export'])->name('hasil.export');
     Route::resource('hasil', HasilController::class);
     // Profile Routes
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');

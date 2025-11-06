@@ -115,6 +115,13 @@ class UserController extends Controller
         $category = 'Belum dapat ditentukan';
         $description = 'Hasil asesmen sedang diproses.';
 
+        // Update answers with nama_siswa if not set
+        foreach ($answers as $answer) {
+            if (empty($answer->nama_siswa)) {
+                $answer->update(['nama_siswa' => $siswa->nama_siswa]);
+            }
+        }
+
         return view('user.hasil', compact('siswa', 'answers', 'totalQuestions', 'answeredQuestions', 'completionPercentage', 'category', 'description'));
     }
 }

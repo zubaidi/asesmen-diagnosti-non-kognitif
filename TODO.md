@@ -1,16 +1,9 @@
-# TODO: Update User Index Modal for Questionnaire Start
+# TODO: Update Admin Hasil Page to Show Summary with Modal Details
 
-## Pending Tasks
-- [x] Update the form tag in the modal to include action="{{ route('user.start') }}", method="POST", and add @csrf for CSRF protection.
-- [x] Add name="nama_siswa" attribute to the nama input field.
-- [x] Add name="nis" attribute to the nis input field.
-- [x] Add a modal-footer with a submit button labeled "Mulai Kuisioner" to enable form submission.
-- [x] Fix the Siswa model creation to include required 'kelas' field.
-
-## Completed Tasks
-- [x] Analyze the current modal structure and plan changes.
-- [x] Get user approval for the plan.
-- [x] Implement the form updates.
-- [x] Add the submit button in the modal footer.
-- [x] Identify and fix the database error by adding 'kelas' => 'X' in UserController.
-- [x] Update Siswa model fillable array to include 'kelas'.
+- [x] Modify HasilController::index() to group answers by NIS and calculate statistics
+- [x] Calculate most frequent answer count (Jawaban Terbanyak)
+- [x] Determine category based on answer patterns using category table
+- [x] Update table to show only: NIS, Nama Siswa, Jawaban Terbanyak, Kategori
+- [x] Create modal to display detailed answers with Kode Jawaban, Opsi Jawaban, Detail Jawaban, Tanggal Submit
+- [x] Update DataTable column definitions for new table structure
+- [x] Implement JavaScript to populate modal with answer details

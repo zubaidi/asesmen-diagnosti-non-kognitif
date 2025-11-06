@@ -14,6 +14,7 @@ class Answer extends Model
     protected $fillable = [
         'answer_code',
         'nis',
+        'nama_siswa',
         'id_soal',
         'id_option_chosen',
     ];

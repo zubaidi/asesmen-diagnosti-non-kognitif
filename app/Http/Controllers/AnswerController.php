@@ -23,10 +23,10 @@ class AnswerController extends Controller
 
         $question = Question::find($request->question_id);
 
-        // Generate unique answer_code for each answer
+        // Membuat kode unik untuk setiap jawaban siswa
         $answerCode = Str::random(10);
 
-        // Check if answer already exists for this question and nis
+        // Check no. pendaftaran sudah terdaftar atau belum
         $existingAnswer = Answer::where('nis', $nis)
             ->where('id_soal', $question->id_soal)
             ->first();

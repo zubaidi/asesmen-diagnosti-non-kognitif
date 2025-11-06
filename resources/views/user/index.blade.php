@@ -591,22 +591,22 @@
                         <div class="mb-4">
                             <label for="nama" class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-control" id="nama" name="nama_siswa"
-                                placeholder="Masukkan nama lengkap Anda" required>
+                                placeholder="Masukkan Nama Lengkap Sesuai Form Pendaftaran" required>
                         </div>
 
                         <div class="mb-4">
-                            <label for="nis" class="form-label">Nomor Induk Siswa (NIS)</label>
+                            <label for="nis" class="form-label">No. Pendaftaran</label>
                             <input type="text" class="form-control" id="nis" name="nis"
-                                placeholder="Masukkan NIS Anda" required>
+                                placeholder="Masukkan 4 Digit No. Pendaftaran Kamu" required>
                         </div>
 
 
                     </form>
 
-                    <div class="alert alert-info text-center">
+                    <div class="alert alert-danger text-center">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        <strong>Informasi:</strong> Pastikan data yang Anda masukkan sudah benar sebelum memulai kuisioner.
-                        Anda tidak dapat mengubah data setelah kuisioner dimulai
+                        <strong>Informasi:</strong> Pastikan data yang kamu masukkan sudah benar sebelum memulai kuisioner.
+                        Kamu tidak dapat mengubah data setelah kuisioner dimulai
                     </div>
                 </div>
 

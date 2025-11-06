@@ -23,29 +23,29 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="font-size: 14px;">
                             <thead class="table-primary">
                                 <tr>
                                     <th style="text-align: center;">#</th>
-                                    <th>ID Soal</th>
-                                    <th>Pertanyaan</th>
-                                    <th>Opsi A</th>
-                                    <th>Opsi B</th>
-                                    <th>Opsi C</th>
-                                    <th>Kategori</th>
+                                    <th style="text-align: center;">ID Soal</th>
+                                    <th style="text-align: center;">Pertanyaan</th>
+                                    <th style="text-align: center;">Opsi A</th>
+                                    <th style="text-align: center;">Opsi B</th>
+                                    <th style="text-align: center;">Opsi C</th>
+                                    <th style="text-align: center;">Kategori</th>
                                     <th style="text-align: center;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($questions as $question)
                                     <tr>
-                                        <td style="text-align: center; width: 60px;">{{ $question->id }}</td>
+                                        <td style="text-align: center; width: 60px;">{{ $loop->iteration }}</td>
                                         <td>{{ $question->id_soal }}</td>
                                         <td>{{ $question->question_text }}</td>
                                         <td>{{ $question->option_a }}</td>
                                         <td>{{ $question->option_b }}</td>
                                         <td>{{ $question->option_c }}</td>
-                                        <td>{{ $question->category }}</td>
+                                        <td style="text-align: center;">{{ $question->category }}</td>
                                         <td style="text-align: center; width: 100px;">
                                             <div class="d-flex flex-column align-items-center gap-1">
                                                 <button class="btn btn-primary btn-sm me-1 w-100" title="View Detail"

@@ -19,52 +19,39 @@
         <div class="card">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Hasil Kuisioner</h6>
+                <a href="{{ route('hasil.export') }}" class="btn btn-success btn-sm">
+                    <i class="fas fa-file-excel me-2"></i>Export Excel
+                </a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="dataTable" class="table table-bordered">
+                    <table id="dataTable" class="table table-bordered" style="font-size: 14px;">
                         <thead class="table-primary">
                             <tr>
-                                <th>No</th>
-                                <th>Kode Jawaban</th>
-                                <th>NIS</th>
-                                <th>Nama Siswa</th>
-                                <th>ID Soal</th>
-                                <th>Jawaban</th>
-                                <th>Tanggal</th>
-                                <th>Aksi</th>
+                                <th style="text-align: center; width: 4%;">#</th>
+                                <th style="text-align: center; width: 8%;">No. Pendaftaran</th>
+                                <th style="text-align: center; width: 20%;">Nama Siswa</th>
+                                <th>Jawaban Terbanyak</th>
+                                <th>Kategori</th>
+                                <th style="text-align: center;">Rekomendasi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($answers as $index => $answer)
+                            @foreach ($groupedAnswers as $index => $group)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $answer->answer_code }}</td>
-                                    <td>{{ $answer->nis }}</td>
-                                    <td>{{ $answer->nama_siswa }}</td>
-                                    <td>{{ $answer->id_soal }}</td>
-                                    <td>{{ $answer->id_option_chosen }}</td>
-                                    <td>{{ $answer->created_at->format('d/m/Y H:i') }}</td>
+                                    <td style="text-align: center;">{{ $index + 1 }}</td>
+                                    <td style="text-align: center;">{{ $group['nis'] }}</td>
+                                    <td>{{ $group['nama_siswa'] }}</td>
+                                    <td>{{ $group['jawaban_terbanyak'] }}</td>
+                                    <td>{{ $group['kategori'] }}</td>
                                     <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('hasil.show', $answer) }}" class="btn btn-sm btn-info"
-                                                title="Lihat Detail">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('hasil.edit', $answer) }}" class="btn btn-sm btn-warning"
-                                                title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form action="{{ route('hasil.destroy', $answer) }}" method="POST"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus hasil ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        <ul>
+                                            @foreach (explode('.', $group['rekomendasi']) as $rekomendasi)
+                                                @if (trim($rekomendasi) !== '')
+                                                    <li>{{ trim($rekomendasi) }}</li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
                                     </td>
                                 </tr>
                             @endforeach
@@ -109,16 +96,34 @@
                         "sortDescending": ": aktifkan untuk mengurutkan kolom secara menurun"
                     }
                 },
-                "columnDefs": [
-                    { "orderable": false, "targets": [7] }, // Disable sorting for Aksi column
-                    { "width": "5%", "targets": 0 }, // No column
-                    { "width": "15%", "targets": 1 }, // Kode Jawaban
-                    { "width": "10%", "targets": 2 }, // NIS
-                    { "width": "20%", "targets": 3 }, // Nama Siswa
-                    { "width": "10%", "targets": 4 }, // ID Soal
-                    { "width": "10%", "targets": 5 }, // Jawaban
-                    { "width": "15%", "targets": 6 }, // Tanggal
-                    { "width": "15%", "targets": 7 }  // Aksi
+                "columnDefs": [{
+                        "orderable": false,
+                        "targets": [5]
+                    }, // Disable sorting for Rekomendasi column
+                    {
+                        "width": "5%",
+                        "targets": 0
+                    }, // No column
+                    {
+                        "width": "10%",
+                        "targets": 1
+                    }, // NIS
+                    {
+                        "width": "20%",
+                        "targets": 2
+                    }, // Nama Siswa
+                    {
+                        "width": "15%",
+                        "targets": 3
+                    }, // Jawaban Terbanyak
+                    {
+                        "width": "15%",
+                        "targets": 4
+                    }, // Kategori
+                    {
+                        "width": "35%",
+                        "targets": 5
+                    } // Rekomendasi
                 ]
             });
         });

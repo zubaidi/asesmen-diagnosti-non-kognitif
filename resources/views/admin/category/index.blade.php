@@ -22,7 +22,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="font-size: 14px;">
                             <thead class="table-primary">
                                 <tr>
                                     <th style="text-align: center;">#</th>
@@ -34,7 +34,7 @@
                             <tbody>
                                 @foreach ($categories as $category)
                                     <tr>
-                                        <td style="text-align: center; width: 60px;">{{ $category->id }}</td>
+                                        <td style="text-align: center; width: 60px;">{{ $loop->iteration }}</td>
                                         <td>{{ $category->name }}</td>
                                         <td>
                                             @if($category->description)

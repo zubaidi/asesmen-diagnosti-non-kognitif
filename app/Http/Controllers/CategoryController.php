@@ -7,6 +7,9 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
+
+    // CRUD Biasa aja engga ada logika macem macem
+
     public function index()
     {
         $categories = Category::all();
