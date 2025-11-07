@@ -17,6 +17,7 @@ Route::get('/submit-questionnaire', [UserController::class, 'submitPage'])->name
 Route::post('/save-answer', [AnswerController::class, 'saveAnswer'])->name('save.answer');
 Route::post('/questionnaire', [UserController::class, 'submit'])->name('user.submit');
 Route::get('/hasil', [UserController::class, 'hasil'])->name('user.hasil');
+Route::get('/category-result', [UserController::class, 'categoryResult'])->name('user.category.result');
 Route::get('/login',[AuthController::class, 'index'])->name('login.form');
 Route::post('/login',[AuthController::class, 'authenticate'])->name('login.authenticate');
 Route::get('/logout',[AuthController::class, 'logout'])->name('logout');

@@ -284,8 +284,6 @@
             });
         });
 
-        let seconds = 0;
-
         function formatTime(sec) {
             const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
             const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
@@ -293,9 +291,22 @@
             return `${hrs}:${mins}:${secs}`;
         }
 
+        // Cek apakah sudah ada waktu mulai di localStorage
+        let startTime = localStorage.getItem("timerStart");
+
+        // Kalau belum ada, simpan waktu saat ini sebagai waktu mulai
+        if (!startTime) {
+            startTime = Date.now();
+            localStorage.setItem("timerStart", startTime);
+        } else {
+            startTime = parseInt(startTime);
+        }
+
+        // Update timer setiap detik
         setInterval(() => {
-            seconds++;
-            document.getElementById('timer').textContent = formatTime(seconds);
+            const now = Date.now();
+            const elapsedSeconds = Math.floor((now - startTime) / 1000);
+            document.getElementById('timer').textContent = formatTime(elapsedSeconds);
         }, 1000);
     </script>
 </body>

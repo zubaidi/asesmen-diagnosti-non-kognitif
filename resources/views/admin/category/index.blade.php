@@ -38,7 +38,7 @@
                                         <td>{{ $category->name }}</td>
                                         <td>
                                             @if($category->description)
-                                                <ul class="list-unstyled">
+                                                <ul class="list">
                                                     @foreach(explode("\n", $category->description) as $line)
                                                         @if(trim($line))
                                                             <li>{{ trim($line) }}</li>

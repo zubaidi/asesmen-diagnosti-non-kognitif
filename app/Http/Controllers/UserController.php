@@ -74,7 +74,7 @@ class UserController extends Controller
 
     public function submitPage()
     {
-        if (!session()->has('answer_code') || !session()->has('nis')) {
+        if (!session()->has('nis')) {
             return redirect('/')->with('error', 'Silakan mulai kuisioner terlebih dahulu.');
         }
 
@@ -84,12 +84,21 @@ class UserController extends Controller
     public function submit(Request $request)
     {
         $nis = session('nis');
+        if (!$nis) {
+            return redirect('/')->with('error', 'Session expired. Silakan mulai kuisioner kembali.');
+        }
 
-        // Clear session
-        session()->forget(['answer_code', 'nis']);
+        // Check if user has answered at least some questions
+        $answers = Answer::where('nis', $nis)->get();
+        if ($answers->isEmpty()) {
+            return redirect()->back()->with('error', 'Anda belum menjawab pertanyaan apapun. Silakan isi kuisioner terlebih dahulu.');
+        }
 
-        // Redirect to hasil page with NIS
-        return redirect()->route('user.hasil', ['nis' => $nis])->with('success', 'Kuisioner telah selesai. Berikut adalah hasil asesmen Anda.');
+        // Clear session except nis for category result
+        session()->forget(['answer_code']);
+
+        // Redirect to category result page
+        return redirect()->route('user.category.result', ['nis' => $nis]);
     }
 
     public function hasil(Request $request)
@@ -123,5 +132,68 @@ class UserController extends Controller
         }
 
         return view('user.hasil', compact('siswa', 'answers', 'totalQuestions', 'answeredQuestions', 'completionPercentage', 'category', 'description'));
+    }
+
+    public function categoryResult(Request $request)
+    {
+        $nis = $request->query('nis');
+        if (!$nis) {
+            return redirect('/')->with('error', 'NIS tidak ditemukan.');
+        }
+
+        $siswa = Siswa::where('nis', $nis)->first();
+        if (!$siswa) {
+            return redirect('/')->with('error', 'Data siswa tidak ditemukan.');
+        }
+
+        $answers = Answer::where('nis', $nis)->with('question')->get();
+
+        // Calculate category based on answers (similar to HasilController logic)
+        $totalAnswers = $answers->count();
+        $category = 'Belum dapat ditentukan';
+        $description = 'Hasil asesmen sedang diproses.';
+
+        if ($totalAnswers > 0) {
+            $optionCounts = $answers->groupBy('id_option_chosen')->map->count();
+            $mostFrequentCount = $optionCounts->max();
+            $mostFrequentOption = $optionCounts->filter(fn ($count) => $count === $mostFrequentCount)->keys();
+
+            $sortedOptions = $mostFrequentOption->toArray();
+
+            // Determine category based on combinations
+            if (count($sortedOptions) == 1) {
+                // Dominant single answer
+                $dominantOption = $sortedOptions[0];
+                $category = $dominantOption == 1 ? 'A' : ($dominantOption == 2 ? 'B' : 'C');
+            } elseif (count($sortedOptions) == 2) {
+                // Two options with same frequency
+                sort($sortedOptions); // Sort to ensure consistent order
+                if ($sortedOptions == [1, 2]) {
+                    $category = 'A dan B';
+                } elseif ($sortedOptions == [1, 3]) {
+                    $category = 'A dan C';
+                } elseif ($sortedOptions == [2, 3]) {
+                    $category = 'B dan C';
+                }
+            }
+
+            // Get recommendation from categories table
+            $categoryModel = \App\Models\Category::where('name', $category)->first();
+            if ($categoryModel) {
+                $description = $categoryModel->description;
+            } else {
+                // Fallback if category not found
+                $description = 'Kategori ditemukan tetapi deskripsi belum tersedia.';
+            }
+        }
+
+        // Update answers with nama_siswa if not set
+        foreach ($answers as $answer) {
+            if (empty($answer->nama_siswa)) {
+                $answer->update(['nama_siswa' => $siswa->nama_siswa]);
+            }
+        }
+
+        return view('user.category-result', compact('siswa', 'category', 'description'));
     }
 }
