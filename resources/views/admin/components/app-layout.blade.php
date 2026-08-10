@@ -221,6 +221,10 @@
                 <i class="fas fa-poll me-2"></i>
                 Hasil Quisioner
             </a>
+            <a href="{{ route('tracer-study.index') }}" class="sidebar-link {{ request()->routeIs('tracer-study.*') ? 'active' : '' }}">
+                <i class="fas fa-briefcase me-2"></i>
+                Hasil Tracer Study
+            </a>
             <a href="{{ route('profile.index') }}" class="sidebar-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
                 <i class="fas fa-user-cog me-2"></i>
                 Pengaturan Profil
@@ -232,7 +236,7 @@
         </div>
         <!-- Footer -->
         <div class="sidebar-footer p-3 text-center" id="sidebarFooter">
-            <p class="mt-2 mb-0 text-muted" style="font-size: 0.8rem;">&copy; 2025 Codepelita SMKSA</p>
+            <p class="mt-2 mb-0 text-white" style="font-size: 0.8rem;">&copy; 2025 Codepelita SMKSA</p>
         </div>
     </nav>
 
@@ -363,7 +367,7 @@
                 let bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();
             }
-        }, 3000); // 1 detik
+        }, 3000); // 3 detik
 
         // Delete confirmation
         document.querySelectorAll('.btn-danger').forEach(btn => {

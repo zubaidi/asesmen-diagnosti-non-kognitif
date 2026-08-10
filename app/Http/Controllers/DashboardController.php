@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Answer;
+use App\Models\TracerStudy;
 
 class DashboardController extends Controller
 {
@@ -69,6 +70,23 @@ class DashboardController extends Controller
             ];
         });
 
-        return view('admin.dashboard', compact('totalSiswa', 'sudahMengerjakan', 'belumMengerjakan', 'categories'));
+        // Distribusi Tracer Study
+        $totalTracerStudy = TracerStudy::count();
+        $tracerStudyCounts = TracerStudy::selectRaw('`option`, COUNT(*) as count')
+            ->groupBy('option')
+            ->pluck('count', 'option');
+
+        $tracerStudyOptions = ['BEKERJA', 'KULIAH', 'WIRAUSAHA'];
+        $tracerStudyDistribution = collect($tracerStudyOptions)->map(function ($option) use ($tracerStudyCounts, $totalTracerStudy) {
+            $count = $tracerStudyCounts->get($option, 0);
+            $percentage = $totalTracerStudy > 0 ? round(($count / $totalTracerStudy) * 100, 2) : 0;
+            return [
+                'category' => $option,
+                'count' => $count,
+                'percentage' => $percentage,
+            ];
+        });
+
+        return view('admin.dashboard', compact('totalSiswa', 'sudahMengerjakan', 'belumMengerjakan', 'categories', 'tracerStudyDistribution'));
     }
 }

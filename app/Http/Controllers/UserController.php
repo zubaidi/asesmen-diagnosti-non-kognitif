@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Question;
 use App\Models\Siswa;
 use App\Models\Answer;
+use App\Models\TracerStudy;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -44,16 +46,26 @@ class UserController extends Controller
 
         $questions = Question::all()->keyBy('id_soal');
         $currentIndex = $request->query('index', 0);
-        $totalQuestions = 45; // Fixed to 45 questions
+        $totalQuestions = 45; // 44 soal + 1 tracer study
 
         if ($currentIndex >= $totalQuestions) {
             return redirect()->route('user.submit.page');
         }
 
-        // Get question by index (0-based) from the collection
-        $questionKeys = $questions->keys()->toArray();
-        $currentQuestionKey = $questionKeys[$currentIndex] ?? null;
-        $currentQuestion = $currentQuestionKey ? $questions->get($currentQuestionKey) : null;
+        $isTracerStudy = false;
+        $tracerStudyData = null;
+
+        // Index 44 = form tracer study
+        if ($currentIndex == 44) {
+            $isTracerStudy = true;
+            $currentQuestion = null;
+            $tracerStudyData = TracerStudy::where('nis', session('nis'))->first();
+        } else {
+            // Get question by index (0-based) from the collection
+            $questionKeys = $questions->keys()->toArray();
+            $currentQuestionKey = $questionKeys[$currentIndex] ?? null;
+            $currentQuestion = $currentQuestionKey ? $questions->get($currentQuestionKey) : null;
+        }
 
         $progress = (($currentIndex + 1) / $totalQuestions) * 100;
 
@@ -66,10 +78,13 @@ class UserController extends Controller
         // Count answered questions
         $answeredCount = $answers->count();
 
-        // Get selected answer for current question
-        $selectedAnswer = $currentQuestionKey ? $answers->get($currentQuestionKey) : null;
+        // Check if tracer study is completed
+        $hasTracerStudy = TracerStudy::where('nis', session('nis'))->exists();
 
-        return view('user.questionnaire', compact('currentQuestion', 'currentIndex', 'totalQuestions', 'progress', 'siswa', 'answeredCount', 'answers', 'selectedAnswer', 'questions'));
+        // Get selected answer for current question
+        $selectedAnswer = (!$isTracerStudy && isset($currentQuestionKey)) ? $answers->get($currentQuestionKey) : null;
+
+        return view('user.questionnaire', compact('currentQuestion', 'currentIndex', 'totalQuestions', 'progress', 'siswa', 'answeredCount', 'answers', 'selectedAnswer', 'questions', 'isTracerStudy', 'tracerStudyData', 'hasTracerStudy'));
     }
 
     public function submitPage()
@@ -195,5 +210,46 @@ class UserController extends Controller
         }
 
         return view('user.category-result', compact('siswa', 'category', 'description'));
+    }
+
+    public function saveTracerStudy(Request $request)
+    {
+        $nis = session('nis');
+        Log::info('saveTracerStudy called', ['nis' => $nis, 'all' => session()->all()]);
+
+        if (!$nis) {
+            return response()->json(['error' => 'Session expired', 'debug' => session()->all()], 401);
+        }
+
+        $validated = $request->validate([
+            'option' => 'required|in:BEKERJA,KULIAH,WIRAUSAHA',
+            'answer' => 'required|string|max:255',
+        ]);
+
+        $siswa = Siswa::where('nis', $nis)->first();
+        $namaSiswa = $siswa ? $siswa->nama_siswa : '';
+
+        Log::info('saveTracerStudy validated', ['nis' => $nis, 'nama_siswa' => $namaSiswa, 'data' => $validated]);
+
+        $existing = TracerStudy::where('nis', $nis)->first();
+
+        if ($existing) {
+            $existing->update([
+                'nama_siswa' => $namaSiswa,
+                'option' => $request->option,
+                'answer' => $request->answer,
+            ]);
+            Log::info('saveTracerStudy updated', ['id' => $existing->id]);
+        } else {
+            $record = TracerStudy::create([
+                'nis' => $nis,
+                'nama_siswa' => $namaSiswa,
+                'option' => $request->option,
+                'answer' => $request->answer,
+            ]);
+            Log::info('saveTracerStudy created', ['id' => $record->id]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

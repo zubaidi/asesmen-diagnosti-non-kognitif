@@ -8,25 +8,24 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class HasilExport implements FromCollection, WithHeadings, WithStyles, ShouldAutoSize
+class TracerStudyExport implements FromCollection, WithHeadings, WithStyles, ShouldAutoSize
 {
-    protected $groupedAnswers;
+    protected $tracerStudies;
 
-    public function __construct($groupedAnswers)
+    public function __construct($tracerStudies)
     {
-        $this->groupedAnswers = $groupedAnswers;
+        $this->tracerStudies = $tracerStudies;
     }
 
     public function collection()
     {
-        return collect($this->groupedAnswers)->map(function ($group, $index) {
+        return collect($this->tracerStudies)->map(function ($ts, $index) {
             return [
                 $index + 1,
-                $group['kelas'],
-                $group['nama_siswa'],
-                $group['jawaban_terbanyak'],
-                $group['kategori'],
-                $group['rekomendasi']
+                $ts->nama_siswa,
+                $ts->siswa->kelas ?? 'N/A',
+                $ts->option,
+                $ts->answer,
             ];
         });
     }
@@ -35,11 +34,10 @@ class HasilExport implements FromCollection, WithHeadings, WithStyles, ShouldAut
     {
         return [
             'No',
-            'Kelas',
             'Nama Siswa',
-            'Jawaban Terbanyak',
-            'Kategori',
-            'Rekomendasi'
+            'Kelas',
+            'Pilihan',
+            'Akan Melanjutkan?',
         ];
     }
 

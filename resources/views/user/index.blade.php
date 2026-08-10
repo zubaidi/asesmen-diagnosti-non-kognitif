@@ -595,9 +595,11 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="nis" class="form-label">No. Pendaftaran</label>
+                            <label for="nis" class="form-label">Kelas</label>
                             <input type="text" class="form-control" id="nis" name="nis"
-                                placeholder="Masukkan 4 Digit No. Pendaftaran Kamu" required>
+                                placeholder="Masukkan Kelas Kamu" required
+                                oninput="this.value = this.value.toUpperCase().replace(/\s/g, '')"
+                                onkeydown="if (event.key === ' ') event.preventDefault()">
                         </div>
 
 
@@ -605,7 +607,8 @@
 
                     <div class="alert alert-danger text-center">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        <strong>Informasi:</strong> Pastikan data yang kamu masukkan sudah benar sebelum memulai kuisioner.
+                        <strong>Informasi:</strong> Pastikan data yang kamu masukkan sudah benar sebelum memulai
+                        kuisioner.
                         Kamu tidak dapat mengubah data setelah kuisioner dimulai
                     </div>
                 </div>
@@ -618,4 +621,5 @@
     </div>
 
 </body>
+
 </html>

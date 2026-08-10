@@ -20,8 +20,10 @@ class HasilController extends Controller
                 $nis = $group->nis;
                 $answers = Answer::where('nis', $nis)->with('question', 'siswa', 'category')->get();
 
-                // ambil data No. Pendaftaran dan Nama Siswa
-                $namaSiswa = $answers->first()->siswa->nama_siswa ?? 'N/A';
+                // ambil data Nama Siswa dan Kelas
+                $siswa = $answers->first()->siswa;
+                $namaSiswa = $siswa->nama_siswa ?? 'N/A';
+                $kelas = $siswa->kelas ?? 'N/A';
 
                 // Menghitung jawaban terbanyak
                 $optionCounts = $answers->groupBy('id_option_chosen')->map->count();
@@ -91,6 +93,7 @@ class HasilController extends Controller
 
                 return [
                     'nis' => $nis,
+                    'kelas' => $kelas,
                     'nama_siswa' => $namaSiswa,
                     'jawaban_terbanyak' => $mostFrequentOptionLetter . ' (' . $mostFrequentCount . ')',
                     'kategori' => $category,
@@ -165,8 +168,10 @@ class HasilController extends Controller
                 $nis = $group->nis;
                 $answers = Answer::where('nis', $nis)->with('question', 'siswa', 'category')->get();
 
-                // Get student name
-                $namaSiswa = $answers->first()->siswa->nama_siswa ?? 'N/A';
+                // Get student name and class
+                $siswa = $answers->first()->siswa;
+                $namaSiswa = $siswa->nama_siswa ?? 'N/A';
+                $kelas = $siswa->kelas ?? 'N/A';
 
                 // Menghitung jawaban terbanyak
                 $optionCounts = $answers->groupBy('id_option_chosen')->map->count();
@@ -236,6 +241,7 @@ class HasilController extends Controller
 
                 return [
                     'nis' => $nis,
+                    'kelas' => $kelas,
                     'nama_siswa' => $namaSiswa,
                     'jawaban_terbanyak' => $mostFrequentOptionLetter . ' (' . $mostFrequentCount . ')',
                     'kategori' => $category,

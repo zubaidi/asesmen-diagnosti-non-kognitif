@@ -26,7 +26,6 @@
                             <thead class="table-primary">
                                 <tr>
                                     <th style="text-align: center;">#</th>
-                                    <th style="text-align: center;">NIS</th>
                                     <th style="text-align: center;">Nama</th>
                                     <th style="text-align: center;">Kelas</th>
                                     <th style="text-align: center;">Aksi</th>
@@ -36,7 +35,6 @@
                                 @foreach ($siswa as $s)
                                     <tr>
                                         <td style="text-align: center; width: 60px;">{{ $s->id }}</td>
-                                        <td style="text-align: center; width: 100px;">{{ $s->nis }}</td>
                                         <td>{{ $s->nama_siswa }}</td>
                                         <td style="text-align: center; width: 100px;">{{ $s->kelas }}</td>
                                         <td style="text-align: center; width: 157px;">

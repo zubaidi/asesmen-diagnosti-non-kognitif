@@ -11,7 +11,7 @@
         body {
             background-color: #ecf0f1;
             font-family: 'Poppins', sans-serif;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .navbar {
@@ -31,7 +31,7 @@
             color: white;
             padding: 20px 40px;
             border-radius: 25px;
-            font-size: 24px;
+            font-size: 12px;
             font-weight: bold;
             display: inline-block;
             margin-bottom: 20px;
@@ -150,7 +150,7 @@
                 // Redirect to home page
                 window.location.href = '/';
             }
-        }, 1000);
+        }, 3000);
     </script>
 </body>
 

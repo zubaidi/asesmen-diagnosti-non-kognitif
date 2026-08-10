@@ -29,10 +29,10 @@
                         <thead class="table-primary">
                             <tr>
                                 <th style="text-align: center; width: 4%;">#</th>
-                                <th style="text-align: center; width: 8%;">No. Pendaftaran</th>
+                                <th style="text-align: center; width: 8%;">Kelas</th>
                                 <th style="text-align: center; width: 20%;">Nama Siswa</th>
-                                <th>Jawaban Terbanyak</th>
-                                <th>Kategori</th>
+                                <th style="text-align: center;">Jawaban Terbanyak</th>
+                                <th style="text-align: center;">Kategori</th>
                                 <th style="text-align: center;">Rekomendasi</th>
                             </tr>
                         </thead>
@@ -40,7 +40,7 @@
                             @foreach ($groupedAnswers as $index => $group)
                                 <tr>
                                     <td style="text-align: center;">{{ $index + 1 }}</td>
-                                    <td style="text-align: center;">{{ $group['nis'] }}</td>
+                                    <td style="text-align: center;">{{ $group['kelas'] }}</td>
                                     <td>{{ $group['nama_siswa'] }}</td>
                                     <td>{{ $group['jawaban_terbanyak'] }}</td>
                                     <td>{{ $group['kategori'] }}</td>

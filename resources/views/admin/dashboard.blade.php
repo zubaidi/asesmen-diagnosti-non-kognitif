@@ -56,36 +56,45 @@
             </div>
         </div>
 
-        <!-- Tabel Kategori Jawaban Siswa -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card bg-white shadow">
-                    <div class="card-header text-primary d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="true" aria-controls="categoryCollapse" style="cursor: pointer;">
-                        <span><i class="fas fa-chart-bar me-2"></i>Distribusi Kategori Jawaban Siswa</span>
-                        <i class="fas fa-chevron-down"></i>
+        <div class="row mt-4 g-4">
+            <!-- Card 1: Kategori Jawaban -->
+            <div class="col-md-6">
+                <div class="card bg-white shadow h-100">
+                    <div class="card-header text-primary d-flex justify-content-between align-items-center">
+                        <span>
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Kategori Jawaban
+                        </span>
+                        <a href="{{ route('hasil.index') }}">Lihat data</a>
                     </div>
+
                     <div id="categoryCollapse" class="collapse show">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
                                     <thead class="table-primary">
                                         <tr>
-                                            <th>Kategori</th>
-                                            <th>Jumlah Siswa</th>
-                                            <th>Persentase (%)</th>
+                                            <th style="width: 8%;" class="text-center">#</th>
+                                            <th style="width: 15%;" class="text-center">Kategori</th>
+                                            <th class="text-center">Jumlah Siswa</th>
+                                            <th class="text-center">Persentase (%)</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         @forelse($categories as $category)
-                                        <tr>
-                                            <td>{{ $category['category'] }}</td>
-                                            <td>{{ $category['count'] }}</td>
-                                            <td>{{ $category['percentage'] }}%</td>
-                                        </tr>
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">{{ $category['category'] }}</td>
+                                                <td class="text-center">{{ $category['count'] }}</td>
+                                                <td class="text-center">{{ $category['percentage'] }}%</td>
+                                            </tr>
                                         @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">Belum ada data kategori</td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    Belum ada data kategori
+                                                </td>
+                                            </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -94,6 +103,56 @@
                     </div>
                 </div>
             </div>
+            <!-- Card 2: Tracer Study -->
+            <div class="col-md-6">
+                <div class="card bg-white shadow h-100">
+                    <div class="card-header text-primary d-flex justify-content-between align-items-center"
+                        style="cursor: pointer;">
+
+                        <span>
+                            <i class="fas fa-briefcase me-2"></i>
+                            Tracer Study
+                        </span>
+
+                        <a href="{{ route('tracer-study.index') }}">Lihat data</a>
+                    </div>
+
+                    <div id="tracerStudyCollapse" class="collapse show">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th style="width: 8%;" class="text-center">#</th>
+                                            <th style="width: 15%;" class="text-center">Kategori</th>
+                                            <th class="text-center">Jumlah Siswa</th>
+                                            <th class="text-center">Persentase (%)</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @forelse($tracerStudyDistribution as $item)
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td >{{ $item['category'] }}</td>
+                                                <td class="text-center">{{ $item['count'] }}</td>
+                                                <td class="text-center">{{ $item['percentage'] }}%</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    Belum ada data tracer study
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </x-app-layout>

@@ -9,12 +9,14 @@ use App\Http\Controllers\PertanyaanController;
 use App\Http\Controllers\HasilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\TracerStudyController;
 
 Route::get('/', [UserController::class, 'index']);
 Route::post('/start-questionnaire', [UserController::class, 'startQuestionnaire'])->name('user.start');
 Route::get('/questionnaire', [UserController::class, 'questionnaire'])->name('user.questionnaire');
 Route::get('/submit-questionnaire', [UserController::class, 'submitPage'])->name('user.submit.page');
 Route::post('/save-answer', [AnswerController::class, 'saveAnswer'])->name('save.answer');
+Route::post('/save-tracer-study', [UserController::class, 'saveTracerStudy'])->name('save.tracer.study');
 Route::post('/questionnaire', [UserController::class, 'submit'])->name('user.submit');
 Route::get('/hasil', [UserController::class, 'hasil'])->name('user.hasil');
 Route::get('/category-result', [UserController::class, 'categoryResult'])->name('user.category.result');
@@ -35,5 +37,8 @@ Route::middleware(['auth'])->group(function () {
     // Profile Routes
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    // Tracer Study Routes
+    Route::get('tracer-study/export', [TracerStudyController::class, 'export'])->name('tracer-study.export');
+    Route::resource('tracer-study', TracerStudyController::class);
 });
 

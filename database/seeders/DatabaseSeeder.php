@@ -22,5 +22,17 @@ class DatabaseSeeder extends Seeder
             'email' => 'superadmin@smksa.com',
             'password' => bcrypt('Smkpk-54'),
         ]);
+        User::factory()->create([
+            'name' => 'Admin Backup',
+            'email' => 'codepelitasmksa@gmail.com',
+            'password' => bcrypt('123Codepelita;'),
+        ]);
+
+        $this->call([
+            CategorySeeder::class,
+            QuestionsSeeder::class,
+            TestQuestionnaireSeeder::class,
+        ]);
     }
+
 }

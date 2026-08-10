@@ -107,8 +107,12 @@
                                         @php $i = $row * 5 + $col; @endphp
                                         @if ($i < $totalQuestions)
                                             @php $questionKey = $questionKeys[$i] ?? null; @endphp
+                                            @php
+                                                $isActive = $i == $currentIndex;
+                                                $isDone = $questionKey ? $answers->has($questionKey) : $hasTracerStudy;
+                                            @endphp
                                             <a href="{{ route('user.questionnaire', ['index' => $i]) }}"
-                                                class="btn btn-sm me-1 {{ $i == $currentIndex ? 'btn-primary' : ($questionKey && $answers->has($questionKey) ? 'btn-success' : 'btn-outline-secondary') }}"
+                                                class="btn btn-sm me-1 {{ $isActive ? 'btn-primary' : ($isDone ? 'btn-success' : 'btn-outline-secondary') }}"
                                                 style="width: 35px; height: 35px; padding: 0; font-size: 12px;">
                                                 {{ $i + 1 }}
                                             </a>
@@ -134,7 +138,7 @@
                                 <strong>Nama:</strong> {{ $siswa->nama_siswa }}
                             </div>
                             <div class="col-md-6">
-                                <strong>NIS:</strong> {{ $siswa->nis }}
+                                <strong>Kelas:</strong> {{ $siswa->nis }}
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -142,7 +146,7 @@
                                 <strong>Progress:</strong> {{ $answeredCount }} dari {{ $totalQuestions }} soal telah
                                 dikerjakan
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 d-none">
                                 <strong>Waktu Mengerjakan:</strong>
                                 <span id="timer">00:00:00</span>
                             </div>
@@ -161,7 +165,26 @@
                 </div> --}}
 
                 <div class="question-card">
-                    @if ($currentQuestion)
+                    @if ($isTracerStudy)
+                        <p class="mb-3">{{ $currentIndex + 1 }}. Status/Kegiatan Saat Ini</p>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="tracerOption" class="form-label">Pilihan</label>
+                                <select class="form-select form-select-sm" id="tracerOption">
+                                    <option value="">Pilih Status</option>
+                                    <option value="BEKERJA" {{ ($tracerStudyData->option ?? '') == 'BEKERJA' ? 'selected' : '' }}>BEKERJA</option>
+                                    <option value="KULIAH" {{ ($tracerStudyData->option ?? '') == 'KULIAH' ? 'selected' : '' }}>KULIAH</option>
+                                    <option value="WIRAUSAHA" {{ ($tracerStudyData->option ?? '') == 'WIRAUSAHA' ? 'selected' : '' }}>WIRAUSAHA</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="tracerAnswer" class="form-label" id="tracerAnswerLabel">Tempat Bekerja Yang Diinginkan</label>
+                                <input type="text" class="form-control form-control-sm" id="tracerAnswer" value="{{ $tracerStudyData->answer ?? '' }}" placeholder="Masukkan jawaban Anda">
+                            </div>
+                        </div>
+                    @elseif ($currentQuestion)
                         <p class="mb-3">{{ $currentIndex + 1 }}. {{ $currentQuestion->question_text }}</p>
 
                         <div class="options">
@@ -188,27 +211,27 @@
                             </label>
                         </div>
                     @else
-                        <div class="alert alert-warning text-center">
+                        {{-- <div class="alert alert-warning text-center">
                             <h5>Soal Dalam Pengembangan</h5>
                             <p>Soal nomor {{ $currentIndex + 1 }} sedang dalam proses pengembangan.</p>
-                        </div>
+                        </div> --}}
                     @endif
                 </div>
 
                 <div class="text-center mt-2">
                     @if ($currentIndex > 0)
                         <a href="{{ route('user.questionnaire', ['index' => $currentIndex - 1]) }}"
-                            class="btn btn-secondary me-2">
+                            class="btn btn-sm btn-secondary me-2">
                             <i class="fas fa-arrow-left me-2"></i>Sebelumnya
                         </a>
                     @endif
 
-                    <button type="button" id="nextBtn" class="btn btn-primary me-2"
-                        {{ $selectedAnswer ? '' : 'disabled' }}>
+                    <button type="button" id="nextBtn" class="btn btn-sm btn-primary me-2"
+                        {{ ($selectedAnswer || $isTracerStudy) ? '' : 'disabled' }}>
                         <i class="fas fa-arrow-right me-2"></i>Berikutnya
                     </button>
 
-                    <button type="button" id="finishBtn" class="btn btn-success">
+                    <button type="button" id="finishBtn" class="btn btn-sm btn-success">
                         <i class="fas fa-check me-2"></i>Selesai Mengerjakan
                     </button>
                 </div>
@@ -227,13 +250,75 @@
                 $('#nextBtn').prop('disabled', false);
             });
 
+            // Tracer study: enable next button when option is selected
+            $('#tracerOption').change(function() {
+                $('#nextBtn').prop('disabled', false);
+                updateTracerLabel();
+            });
+
+            // Tracer study: dynamic label
+            function updateTracerLabel() {
+                var option = $('#tracerOption').val();
+                var label = 'Tempat Bekerja Yang Diinginkan';
+                if (option === 'KULIAH') {
+                    label = 'Perguruan Tinggi Yang Diinginkan';
+                } else if (option === 'WIRAUSAHA') {
+                    label = 'Jenis/Bidang Usaha Yang Diinginkan';
+                }
+                $('#tracerAnswerLabel').text(label);
+            }
+
+            // Init label on page load
+            @if ($isTracerStudy)
+                updateTracerLabel();
+                @if (!empty($tracerStudyData->option))
+                    $('#nextBtn').prop('disabled', false);
+                @endif
+            @endif
+
             // Pre-select if answer exists
             @if ($selectedAnswer)
                 $('#nextBtn').prop('disabled', false);
             @endif
 
             $('#nextBtn').click(function() {
-                @if ($currentQuestion)
+                @if ($isTracerStudy)
+                    // Save tracer study data
+                    var tracerOption = $('#tracerOption').val();
+                    var tracerAnswer = $('#tracerAnswer').val();
+                    if (!tracerOption) {
+                        alert('Silakan pilih status/kegiatan terlebih dahulu.');
+                        return;
+                    }
+                    if (!tracerAnswer) {
+                        alert('Silakan isi jawaban terlebih dahulu.');
+                        return;
+                    }
+
+                    var btn = $(this);
+                    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...');
+
+                    $.ajax({
+                        url: '{{ route('save.tracer.study') }}',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            option: tracerOption,
+                            answer: tracerAnswer
+                        },
+                        success: function(response) {
+                            window.location.href = '{{ route('user.submit.page') }}';
+                        },
+                        error: function(xhr) {
+                            btn.prop('disabled', false).html('<i class="fas fa-arrow-right me-2"></i>Berikutnya');
+                            var msg = 'Terjadi kesalahan saat menyimpan data tracer study.';
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                msg += '\n' + xhr.responseJSON.message;
+                            }
+                            alert(msg);
+                        }
+                    });
+                @elseif ($currentQuestion)
                     var selectedAnswer = $('input[name="answer"]:checked').val();
                     if (!selectedAnswer) {
                         alert('Silakan pilih jawaban terlebih dahulu.');
@@ -276,11 +361,36 @@
             });
 
             $('#finishBtn').click(function() {
-                if (confirm(
-                        'Apakah Anda yakin ingin menyelesaikan kuesioner? Jawaban yang belum tersimpan akan hilang.'
-                    )) {
-                    window.location.href = '{{ route('user.submit.page') }}';
-                }
+                @if ($isTracerStudy)
+                    // On tracer study page, save first then finish
+                    var tracerOption = $('#tracerOption').val();
+                    var tracerAnswer = $('#tracerAnswer').val();
+                    if (!tracerOption || !tracerAnswer) {
+                        alert('Silakan lengkapi data tracer study terlebih dahulu.');
+                        return;
+                    }
+                    if (confirm('Apakah Anda yakin ingin menyelesaikan kuesioner?')) {
+                        $.ajax({
+                            url: '{{ route('save.tracer.study') }}',
+                            method: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                option: tracerOption,
+                                answer: tracerAnswer
+                            },
+                            success: function(response) {
+                                window.location.href = '{{ route('user.submit.page') }}';
+                            },
+                            error: function(xhr) {
+                                alert('Gagal menyimpan data tracer study. Silakan coba lagi.');
+                            }
+                        });
+                    }
+                @else
+                    if (confirm('Apakah Anda yakin ingin menyelesaikan kuesioner? Jawaban yang belum tersimpan akan hilang.')) {
+                        window.location.href = '{{ route('user.submit.page') }}';
+                    }
+                @endif
             });
         });
 
@@ -292,12 +402,12 @@
         }
 
         // Cek apakah sudah ada waktu mulai di localStorage
-        let startTime = localStorage.getItem("timerStart");
+        let startTime = sessionStorage.getItem("timerStart");
 
         // Kalau belum ada, simpan waktu saat ini sebagai waktu mulai
         if (!startTime) {
             startTime = Date.now();
-            localStorage.setItem("timerStart", startTime);
+            sessionStorage.setItem("timerStart", startTime);
         } else {
             startTime = parseInt(startTime);
         }
