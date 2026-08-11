@@ -99,7 +99,7 @@
                             <h5><i class="fas fa-user me-2"></i>{{ $siswa->nama_siswa }}</h5>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <h5><i class="fas fa-id-card me-2"></i>NIS: {{ $siswa->nis }}</h5>
+                            <h5><i class="fas fa-id-card me-2"></i>Kelas: {{ $siswa->kelas }}</h5>
                         </div>
                     </div>
                 </div>

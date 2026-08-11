@@ -594,14 +594,21 @@
                                 placeholder="Masukkan Nama Lengkap Sesuai Form Pendaftaran" required>
                         </div>
 
+                        <?php
+                        $kelas = ['XTKR1', 'XTKR2', 'XTKR3', 'XTSM1', 'XTSM2', 'XTSM3', 'XTSM4', 'XTKJ1', 'XTKJ2', 'XTKJ3', 'XTKJ4', 'XRPL1', 'XRPL2', 'XDPB1', 'XDPB2'];
+                        ?>
                         <div class="mb-4">
-                            <label for="nis" class="form-label">Kelas</label>
-                            <input type="text" class="form-control" id="nis" name="nis"
-                                placeholder="Masukkan Kelas Kamu" required
-                                oninput="this.value = this.value.toUpperCase().replace(/\s/g, '')"
-                                onkeydown="if (event.key === ' ') event.preventDefault()">
-                        </div>
+                            <label for="kelas" class="form-label">Kelas</label>
+                            <select class="form-select" id="kelas" name="kelas" required>
+                                <option value="" selected disabled>Pilih Kelas</option>
 
+                                <?php foreach ($kelas as $item): ?>
+                                <option value="<?= $item ?>">
+                                    <?= $item ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
                     </form>
 

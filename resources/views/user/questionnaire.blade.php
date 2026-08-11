@@ -138,7 +138,7 @@
                                 <strong>Nama:</strong> {{ $siswa->nama_siswa }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Kelas:</strong> {{ $siswa->nis }}
+                                <strong>ID:</strong> {{ $siswa->nis }}
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -146,9 +146,8 @@
                                 <strong>Progress:</strong> {{ $answeredCount }} dari {{ $totalQuestions }} soal telah
                                 dikerjakan
                             </div>
-                            <div class="col-md-6 d-none">
-                                <strong>Waktu Mengerjakan:</strong>
-                                <span id="timer">00:00:00</span>
+                            <div class="col-md-6">
+                                <strong>Kelas:</strong> {{ $siswa->kelas }}
                             </div>
                         </div>
                     </div>
@@ -166,12 +165,11 @@
 
                 <div class="question-card">
                     @if ($isTracerStudy)
-                        <p class="mb-3">{{ $currentIndex + 1 }}. Status/Kegiatan Saat Ini</p>
+                        <p class="mb-3">{{ $currentIndex + 1 }}. Apa yang akan kamu lakukan setelah lulus?</p>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="tracerOption" class="form-label">Pilihan</label>
                                 <select class="form-select form-select-sm" id="tracerOption">
-                                    <option value="">Pilih Status</option>
                                     <option value="BEKERJA" {{ ($tracerStudyData->option ?? '') == 'BEKERJA' ? 'selected' : '' }}>BEKERJA</option>
                                     <option value="KULIAH" {{ ($tracerStudyData->option ?? '') == 'KULIAH' ? 'selected' : '' }}>KULIAH</option>
                                     <option value="WIRAUSAHA" {{ ($tracerStudyData->option ?? '') == 'WIRAUSAHA' ? 'selected' : '' }}>WIRAUSAHA</option>

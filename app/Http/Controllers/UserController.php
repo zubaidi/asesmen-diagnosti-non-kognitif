@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Siswa;
-use App\Models\Answer;
 use App\Models\TracerStudy;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+// use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -21,18 +22,23 @@ class UserController extends Controller
     {
         $request->validate([
             'nama_siswa' => 'required|string|max:100',
-            'nis' => 'required|string|max:20|unique:siswa,nis',
+            'kelas' => 'required|string|max:20',
         ]);
+
+        // generate id NIS acak aja lah males
+        do {
+            $nis = random_int(1000, 9999);
+        } while (Siswa::where('nis', $nis)->exists());
 
         // Create Siswa record
         Siswa::create([
-            'nis' => $request->nis,
+            'nis' => $nis,
             'nama_siswa' => $request->nama_siswa,
-            'kelas' => 'X',
+            'kelas' => $request->kelas,
         ]);
 
         // Store in session
-        session(['nis' => $request->nis]);
+        session(['nis' => $nis]);
 
         return redirect()->route('user.questionnaire');
     }
@@ -40,7 +46,7 @@ class UserController extends Controller
     public function questionnaire(Request $request)
     {
         // Check if session exists
-        if (!session()->has('nis')) {
+        if (! session()->has('nis')) {
             return redirect('/')->with('error', 'Silakan mulai kuisioner terlebih dahulu.');
         }
 
@@ -82,14 +88,14 @@ class UserController extends Controller
         $hasTracerStudy = TracerStudy::where('nis', session('nis'))->exists();
 
         // Get selected answer for current question
-        $selectedAnswer = (!$isTracerStudy && isset($currentQuestionKey)) ? $answers->get($currentQuestionKey) : null;
+        $selectedAnswer = (! $isTracerStudy && isset($currentQuestionKey)) ? $answers->get($currentQuestionKey) : null;
 
         return view('user.questionnaire', compact('currentQuestion', 'currentIndex', 'totalQuestions', 'progress', 'siswa', 'answeredCount', 'answers', 'selectedAnswer', 'questions', 'isTracerStudy', 'tracerStudyData', 'hasTracerStudy'));
     }
 
     public function submitPage()
     {
-        if (!session()->has('nis')) {
+        if (! session()->has('nis')) {
             return redirect('/')->with('error', 'Silakan mulai kuisioner terlebih dahulu.');
         }
 
@@ -99,7 +105,7 @@ class UserController extends Controller
     public function submit(Request $request)
     {
         $nis = session('nis');
-        if (!$nis) {
+        if (! $nis) {
             return redirect('/')->with('error', 'Session expired. Silakan mulai kuisioner kembali.');
         }
 
@@ -119,12 +125,12 @@ class UserController extends Controller
     public function hasil(Request $request)
     {
         $nis = $request->query('nis');
-        if (!$nis) {
+        if (! $nis) {
             return redirect('/')->with('error', 'NIS tidak ditemukan.');
         }
 
         $siswa = Siswa::where('nis', $nis)->first();
-        if (!$siswa) {
+        if (! $siswa) {
             return redirect('/')->with('error', 'Data siswa tidak ditemukan.');
         }
 
@@ -152,12 +158,12 @@ class UserController extends Controller
     public function categoryResult(Request $request)
     {
         $nis = $request->query('nis');
-        if (!$nis) {
+        if (! $nis) {
             return redirect('/')->with('error', 'NIS tidak ditemukan.');
         }
 
         $siswa = Siswa::where('nis', $nis)->first();
-        if (!$siswa) {
+        if (! $siswa) {
             return redirect('/')->with('error', 'Data siswa tidak ditemukan.');
         }
 
@@ -217,7 +223,7 @@ class UserController extends Controller
         $nis = session('nis');
         Log::info('saveTracerStudy called', ['nis' => $nis, 'all' => session()->all()]);
 
-        if (!$nis) {
+        if (! $nis) {
             return response()->json(['error' => 'Session expired', 'debug' => session()->all()], 401);
         }
 
