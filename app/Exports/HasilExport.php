@@ -22,8 +22,9 @@ class HasilExport implements FromCollection, WithHeadings, WithStyles, ShouldAut
         return collect($this->groupedAnswers)->map(function ($group, $index) {
             return [
                 $index + 1,
-                $group['kelas'],
+                $group['nis'],
                 $group['nama_siswa'],
+                $group['kelas'],
                 $group['jawaban_terbanyak'],
                 $group['kategori'],
                 $group['rekomendasi']
@@ -35,8 +36,9 @@ class HasilExport implements FromCollection, WithHeadings, WithStyles, ShouldAut
     {
         return [
             'No',
-            'Kelas',
+            'NIS',
             'Nama Siswa',
+            'Kelas',
             'Jawaban Terbanyak',
             'Kategori',
             'Rekomendasi'

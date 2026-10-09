@@ -579,7 +579,7 @@
 
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="mulaiKuisionerModalLabel">
-                        <i class="bi bi-pencil-square me-2"></i> Formulir Pendaftaran Kuisioner
+                        <i class="bi bi-pencil-square me-2"></i> Login Siswa dengan NIS
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
@@ -589,39 +589,26 @@
                     <form id="quizForm" action="{{ route('user.start') }}" method="POST">
                         @csrf
                         <div class="mb-4">
-                            <label for="nama" class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="nama" name="nama_siswa"
-                                placeholder="Masukkan Nama Lengkap Sesuai Form Pendaftaran" required>
+                            <label for="nis" class="form-label">NIS</label>
+                            <input type="text" class="form-control" id="nis" name="nis"
+                                placeholder="Masukkan NIS siswa" inputmode="numeric" pattern="[0-9]*" required>
                         </div>
 
-                        <?php
-                        $kelas = ['XTKR1', 'XTKR2', 'XTKR3', 'XTSM1', 'XTSM2', 'XTSM3', 'XTSM4', 'XTKJ1', 'XTKJ2', 'XTKJ3', 'XTKJ4', 'XRPL1', 'XRPL2', 'XDPB1', 'XDPB2'];
-                        ?>
-                        <div class="mb-4">
-                            <label for="kelas" class="form-label">Kelas</label>
-                            <select class="form-select" id="kelas" name="kelas" required>
-                                <option value="" selected disabled>Pilih Kelas</option>
-
-                                <?php foreach ($kelas as $item): ?>
-                                <option value="<?= $item ?>">
-                                    <?= $item ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
+                        @if ($errors->has('nis') || session('error'))
+                            <div class="alert alert-danger text-center">
+                                {{ $errors->first('nis') ?: session('error') }}
+                            </div>
+                        @endif
                     </form>
 
-                    <div class="alert alert-danger text-center">
+                    <div class="alert alert-info text-center">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        <strong>Informasi:</strong> Pastikan data yang kamu masukkan sudah benar sebelum memulai
-                        kuisioner.
-                        Kamu tidak dapat mengubah data setelah kuisioner dimulai
+                        <strong>Informasi:</strong> Masukkan NIS yang terdaftar pada data siswa untuk memulai kuisioner.
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" form="quizForm" class="btn btn-primary">Mulai Kuisioner</button>
+                    <button type="submit" form="quizForm" class="btn btn-primary">Masuk & Mulai Kuisioner</button>
                 </div>
             </div>
         </div>

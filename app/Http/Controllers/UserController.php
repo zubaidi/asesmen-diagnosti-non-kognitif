@@ -21,24 +21,24 @@ class UserController extends Controller
     public function startQuestionnaire(Request $request)
     {
         $request->validate([
-            'nama_siswa' => 'required|string|max:100',
-            'kelas' => 'required|string|max:20',
+            'nis' => ['required', 'numeric', 'digits_between:1,20'],
+        ], [
+            'nis.required' => 'NIS wajib diisi.',
+            'nis.numeric' => 'NIS harus berupa angka.',
+            'nis.digits_between' => 'NIS maksimal 20 digit.',
         ]);
 
-        // generate id NIS acak aja lah males
-        do {
-            $nis = random_int(1000, 9999);
-        } while (Siswa::where('nis', $nis)->exists());
+        $siswa = Siswa::where('nis', $request->nis)->first();
 
-        // Create Siswa record
-        Siswa::create([
-            'nis' => $nis,
-            'nama_siswa' => $request->nama_siswa,
-            'kelas' => $request->kelas,
+        if (! $siswa) {
+            return back()->with('error', 'NIS tidak ditemukan. Silakan hubungi admin atau pastikan NIS yang dimasukkan benar.')->withInput();
+        }
+
+        session([
+            'nis' => $siswa->nis,
+            'nama_siswa' => $siswa->nama_siswa,
+            'kelas' => $siswa->kelas,
         ]);
-
-        // Store in session
-        session(['nis' => $nis]);
 
         return redirect()->route('user.questionnaire');
     }
